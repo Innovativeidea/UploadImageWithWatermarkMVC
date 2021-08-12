@@ -1,0 +1,65 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#imgUploded').hide();
+        });
+        function UploadImage() {
+            $('#upload-file-info').text($('#my-file-selector')[0].files[0].name)
+            var imageFiles = $('#my-file-selector').get(0);
+            var files = imageFiles.files;
+            var fileData = new FormData();
+            for (var i = 0; i < files.length; i++) {
+                fileData.append(files[i].name, files[i]);
+            }
+            var url = '/Home/SaveImage';
+            $.ajax({
+                url: url,
+                type: "POST",
+                processData: false,
+                contentType: false,
+                data: fileData,
+                success: function (response) {
+                    //code after success
+                    var image = response.ImageUrl;
+                    $('#imgUploded').show();
+                    $('#imgUploded').attr('src', image);
+
+                },
+                error: function (er) {
+                    //alert(er);
+                }
+
+            });
+        }
+    </script>
+}
+<div class="jumbotron">
+    <h1>ASP.NET</h1>
+    <p class="lead">Here i am creating one small example like, when upload any image then there should be watermark inside the uploaded image</p>
+    <div class="row">
+        <div class="col-lg-4 col-md-4">
+        </div>
+        <div class="col-lg-4 col-md-4">
+            <label class="btn btn-primary" for="my-file-selector">
+                <input id="my-file-selector" type="file" style="display:none"
+                       onchange="UploadImage();">
+                Click to upload
+            </label>
+            <span class='label label-info' id="upload-file-info"></span>
+        </div>
+        <div class="col-lg-4 col-md-4">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-2 col-md-4">
+        </div>
+        <div class="col-lg-8 col-md-4">
+            <img id="imgUploded" src="" alt="Watermark Image" style="display:none; width:400px" />
+        </div>
+        <div class="col-lg-2 col-md-4">
+        </div>
+    </div>
+</div>
